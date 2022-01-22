@@ -5,6 +5,11 @@
 
 oauth2 package contains a client implementation for OAuth 2.0 spec.
 
+## Ridge fork
+
+This fork removes all dependencies from the library. The only visible difference
+is that it _might_ be broken under AppEngine.
+
 ## Installation
 
 ~~~~
