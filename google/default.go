@@ -14,9 +14,9 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"cloud.google.com/go/compute/metadata"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/authhandler"
+	"golang.org/x/oauth2/google/metadata"
 )
 
 // Credentials holds Google credentials, including "Application Default Credentials".
