@@ -13,8 +13,6 @@ import (
 	"sort"
 	"testing"
 	"time"
-
-	"github.com/google/go-cmp/cmp"
 )
 
 type testEnvironment struct {
@@ -239,6 +237,24 @@ var getEnvironmentTests = []struct {
 	},
 }
 
+func sameStrings(a []string, b []string) bool {
+	acopy := append([]string(nil), a...)
+	sort.Strings(acopy)
+	bcopy := append([]string(nil), b...)
+	sort.Strings(bcopy)
+
+	if len(acopy) != len(bcopy) {
+		return false
+	}
+
+	for i := 0; i < len(acopy); i++ {
+		if acopy[i] != bcopy[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func TestExecutableCredentialGetEnvironment(t *testing.T) {
 	for _, tt := range getEnvironmentTests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -251,14 +267,7 @@ func TestExecutableCredentialGetEnvironment(t *testing.T) {
 
 			ecs.env = &tt.environment
 
-			// This Transformer sorts a []string.
-			sorter := cmp.Transformer("Sort", func(in []string) []string {
-				out := append([]string(nil), in...) // Copy input to avoid mutating it
-				sort.Strings(out)
-				return out
-			})
-
-			if got, want := ecs.executableEnvironment(), tt.expectedEnvironment; !cmp.Equal(got, want, sorter) {
+			if got, want := ecs.executableEnvironment(), tt.expectedEnvironment; !sameStrings(got, want) {
 				t.Errorf("Incorrect environment received.\nReceived: %s\nExpected: %s", got, want)
 			}
 		})
